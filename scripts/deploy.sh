@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-git push heroku master
+git push origin master
