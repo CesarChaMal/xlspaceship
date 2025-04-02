@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-./activator clean stage
+../activator clean stage
