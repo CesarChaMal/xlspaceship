@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-./activator run
+../activator run
