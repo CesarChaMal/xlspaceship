@@ -1,0 +1,5 @@
+[repositories]
+  local
+  maven-central
+  sbt-releases: https://repo.scala-sbt.org/scalasbt/sbt-releases/
+  typesafe-ivy-releases: https://repo.typesafe.com/typesafe/ivy-releases/

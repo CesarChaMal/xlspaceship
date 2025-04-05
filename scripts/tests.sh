@@ -1,3 +1,2 @@
-#!/usr/bin/env sh
-
-..activator test
+#!/bin/bash
+sbt test

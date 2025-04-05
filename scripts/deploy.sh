@@ -1,3 +1,3 @@
-#!/usr/bin/env sh
-
-git push origin master
+#!/bin/bash
+#sbt clean compile stage
+sbt clean dist

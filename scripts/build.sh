@@ -1,3 +1,3 @@
-#!/usr/bin/env sh
-
-../activator dist
+#!/bin/bash
+sbt reload
+sbt clean compile

@@ -1,3 +1,2 @@
-#!/usr/bin/env sh
-
-../activator run
+#!/bin/bash
+sbt run
