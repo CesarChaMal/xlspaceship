@@ -10,19 +10,27 @@ else
   WINDOWS=false
 fi
 
-# Server directories to avoid sbt lock issues (recommended for Windows)
 SERVER1_DIR="server_user123"
 SERVER2_DIR="server_user456"
 
+copy_project() {
+  local TARGET_DIR=$1
+  echo "📁 Preparing $TARGET_DIR"
+  mkdir -p "$TARGET_DIR"
+
+  cp -r ../app ../conf ../project "$TARGET_DIR"
+  [[ -d ../public ]] && cp -r ../public "$TARGET_DIR"
+  cp ../build.sbt "$TARGET_DIR"
+  cp ../README.md "$TARGET_DIR" 2>/dev/null
+
+  # Clean up old targets
+  rm -rf "$TARGET_DIR/target" "$TARGET_DIR/project/target" "$TARGET_DIR/project/project"
+}
+
 if $WINDOWS; then
   echo "🪟 Detected Windows — using separate directories to avoid sbt lock conflict."
-
-  mkdir -p "$SERVER1_DIR" "$SERVER2_DIR"
-
-  # Symlink the actual project into each
-  for DIR in "$SERVER1_DIR" "$SERVER2_DIR"; do
-    [[ ! -e "$DIR/app" ]] && cp -r app conf project public build.sbt "$DIR" 2>/dev/null
-  done
+  copy_project "$SERVER1_DIR"
+  copy_project "$SERVER2_DIR"
 
   echo "🚀 Starting Server 1 (user123) on port 9000..."
   (cd "$SERVER1_DIR" && sbt -Dhttp.port=9000 run) > "$LOG_DIR/server1.log" 2>&1 &

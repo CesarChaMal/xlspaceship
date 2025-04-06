@@ -1,12 +1,20 @@
 #!/bin/bash
 
+# Ensure directory exists
+mkdir -p game
+
 # Start a new game and store result to file
 echo "🔄 Starting a new game..."
-./start_game.sh > new_game.json
+./start_game.sh > game/new_game.json
 
-# Extract game_id and player_id from start_game output
-GAME_ID=$(jq -r '.game_id' new_game.json)
-PLAYER_ID=$(jq -r '.user_id' new_game.json)
+if [[ ! -f game/new_game.json ]]; then
+  echo "❌ new_game.json was not created!"
+  exit 1
+fi
+
+# Extract game_id and player_id
+GAME_ID=$(jq -r '.game_id' game/new_game.json)
+PLAYER_ID=$(jq -r '.user_id' game/new_game.json)
 echo "🎮 Game ID: $GAME_ID | Player ID: $PLAYER_ID"
 
 if [[ "$GAME_ID" == "null" || -z "$GAME_ID" ]]; then
@@ -17,27 +25,41 @@ fi
 # Game loop
 while true; do
   echo -e "\n🚀 Firing salvo..."
-  ./fire_salvo.sh "$GAME_ID" > salvo_response.json
+  ./fire_salvo.sh "$GAME_ID" "$PLAYER_ID" > game/salvo_response.json
 
-  echo "💥 Salvo response:"
-  cat salvo_response.json | jq
-
-  # Handle error in response
-  if jq -e '.error' salvo_response.json >/dev/null; then
-    echo "❌ Error: $(jq -r '.error' salvo_response.json)"
+  if jq -e '.error' game/salvo_response.json >/dev/null; then
+    echo "❌ Error: $(jq -r '.error' game/salvo_response.json)"
     break
   fi
 
-  # Check if game is complete
-  GAME_COMPLETE=$(jq -r '.game.gameComplete' salvo_response.json)
-  if [[ "$GAME_COMPLETE" == "true" ]]; then
-    echo -e "\n🏁 Game Over!"
-    break
-  fi
+  ./accept_salvo.sh "$GAME_ID" "$PLAYER_ID"
 
   echo -e "\n📊 Getting game status..."
-  ./get_status.sh "$GAME_ID" > status.json
-  cat status.json | jq
+  ./get_status.sh "$GAME_ID" > game/status.json
+
+  # Summary from status
+  TURN=$(jq -r '.turn // "N/A"' game/status.json)
+  GAME_COMPLETE=$(jq -r '.gameComplete // false' game/status.json)
+  GAME_WON=$(jq -r '.won // false' game/status.json)
+  SALVO_RESULTS=$(jq -r '.salvo // {}' game/status.json)
+
+  echo ""
+  echo "📊 Summary:"
+  echo "🌀 Turn:        $TURN"
+  echo "✅ Game Over:   $GAME_COMPLETE"
+  echo "🏆 You Won?:    $GAME_WON"
+  echo ""
+  echo "🎯 Salvo Results:"
+  echo "$SALVO_RESULTS" | jq .
+
+  if [[ "$GAME_COMPLETE" == "true" ]]; then
+    if [[ "$GAME_WON" == "true" ]]; then
+      echo -e "\n🏆 [$PLAYER_ID] YOU WIN!"
+    else
+      echo -e "\n💀 [$PLAYER_ID] YOU LOST!"
+    fi
+    break
+  fi
 
   sleep 2
 done

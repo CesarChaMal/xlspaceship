@@ -8,4 +8,4 @@ curl -X POST http://localhost:9000/xl-spaceship/protocol/game/new \
       "hostname": "localhost",
       "port": 9000
     }
-  }' | tee new_game.json
+  }' | tee game/new_game.json

@@ -32,7 +32,7 @@ trait GameFormatter {
     )
   }
 
-  implicit val gameStatusWrites = new Writes[GameStatus] {
+  implicit val gameStatusWrites: Writes[GameStatus] = new Writes[GameStatus] {
 
     def writes(gameStatus: GameStatus) : JsObject = {
 

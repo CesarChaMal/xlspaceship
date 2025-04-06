@@ -15,7 +15,8 @@ trait GameRequestFormatter {
 
   implicit val gameRequestReads: Reads[GameRequest] = (
     (JsPath \ "user_id").read[String] and
-      (JsPath \ "spaceship_protocol").read[Protocol]
+//      (JsPath \ "spaceship_protocol").read[Protocol] and
+      (JsPath \ "protocol").read[Protocol] and
+      (JsPath \ "game_id").readWithDefault[String]("")
     )(GameRequest.apply _)
-
 }

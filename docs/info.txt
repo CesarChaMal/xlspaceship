@@ -1,0 +1,17 @@
+sdk install sbt 1.10.11
+sdk use sbt 1.10.11
+
+
+sdk install java 8.0.412.fx-zulu
+sdk use java 8.0.412.fx-zulu
+
+rm -rf ~/.ivy2/cache
+rm -rf ~/.sbt/boot
+rm -rf project/target
+rm -rf target
+
+sbt clean compile
+sbt compile run
+
+docker build -t xlspaceship .
+docker run --rm -v "$PWD":/app xlspaceship

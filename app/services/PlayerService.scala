@@ -25,9 +25,15 @@ class PlayerService @Inject()(
     Player(playerID, playerName, Some(spaceships), board)
   }
 
-  def createOpponent(gameRequest: GameRequest): Player = {
+  def createPlayerFromRequest(request: GameRequest): Player = {
     val board = boardService.createBoard()
-    Player(gameRequest.player_id, "Default Name", None, board)
+    val spaceships = spaceshipService.createSpaceships(board)
+    val playerId = request.player_id
+    val fullName = if (playerId.startsWith("user")) s"User ${playerId.stripPrefix("user")}" else s"Player ${playerId}"
+    logger.debug(s"Created player '${playerId}' with board hash: ${System.identityHashCode(board)}")
+
+    //    Player(playerId, "Default Name", None, board)
+    Player(playerId, fullName, Some(spaceships), board)
   }
 }
 

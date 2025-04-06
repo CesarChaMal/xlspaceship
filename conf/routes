@@ -1,8 +1,11 @@
 # Root endpoint
-GET     /       controllers.Application.index
+GET / controllers.Application.index
 
 #create a new game simulation
 POST /xl-spaceship/protocol/game/new controllers.Application.newGame
+
+#join a game
+POST /xl-spaceship/protocol/game/join controllers.Application.joinGame
 
 #accept salvo from opponent
 PUT /xl-spaceship/protocol/game/:gameID controllers.Application.acceptSalvo(gameID: String)
@@ -18,3 +21,4 @@ PUT /xl-spaceship/user/game/:gameID/fire controllers.WSClientController.fireSalv
 
 #to handle the  preflight request
 OPTIONS /xl-spaceship/protocol/game/new	controllers.Application.preFlight()
+

@@ -1,0 +1,13 @@
+{
+  "salvo": {
+    "5x7": "miss",
+    "6x6": "miss",
+    "2x3": "miss"
+  },
+  "game": {
+    "gameComplete": false,
+    "won": true,
+    "player_id": "user456"
+  }
+}
+{"salvo":{"5x7":"miss","6x6":"miss","2x3":"miss"},"game":{"gameComplete":false,"won":true,"player_id":"user456"}}

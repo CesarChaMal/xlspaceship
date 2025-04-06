@@ -60,15 +60,14 @@ To deploy the application manually later, run:
 
 ## ✅ Step-by-Step: Run the 2-Player SpaceXL Game Simulation
 
-### 1️⃣ Start the Servers
+### 1️⃣ Start the Server
 
 ```bash
-./scripts_game/start_servers.sh
+./scripts_game/start_server.sh
 ```
 
 This will launch:
 - Player 1 server at `localhost:9000`
-- Player 2 server at `localhost:9001`
 
 Wait ~10 seconds for both servers to be ready.
 
